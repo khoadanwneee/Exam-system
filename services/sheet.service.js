@@ -1,11 +1,19 @@
 import dotenv from 'dotenv';
 import { google } from "googleapis";
-import fs from "fs";
 
 dotenv.config();
 
-const credentials = JSON.parse(fs.readFileSync("history-question-1b3ed7158a13.json", "utf8"));
+// Lấy ID Google Sheet từ env
 const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+// Lấy nội dung service account JSON từ env
+const rawCredentials = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+
+if (!rawCredentials) {
+  throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_JSON in environment variables");
+}
+
+const credentials = JSON.parse(rawCredentials);
 
 const auth = new google.auth.GoogleAuth({
   credentials,
@@ -28,26 +36,28 @@ export async function readSheet(range) {
 }
 
 export async function readAllSheets() {
-    const sheetNames = ['Nhận biết', 'Thông hiểu', 'Vận dụng'];
-    const range = "B:G";
-    const sheets = await getSheetsClient();
-    const result = {};
+  const sheetNames = ['Nhận biết', 'Thông hiểu', 'Vận dụng'];
+  const range = "B:G";
+  const sheets = await getSheetsClient();
+  const result = {};
 
-    for (const name of sheetNames) {
-        const { data } = await sheets.spreadsheets.values.get({
-            spreadsheetId,
-            range: `${name}!${range}`,
-        });
-        result[name] = data.values || [];
-    }
-
+  // 3 sheet đầu: B:G
+  for (const name of sheetNames) {
     const { data } = await sheets.spreadsheets.values.get({
-        spreadsheetId,
-        range: `Đúng sai!B:K`,
+      spreadsheetId,
+      range: `${name}!${range}`,
     });
-    result["Đúng sai"] = data.values || [];
+    result[name] = data.values || [];
+  }
 
-    return result;
+  // Sheet Đúng sai: B:K
+  const { data } = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `Đúng sai!B:K`,
+  });
+  result["Đúng sai"] = data.values || [];
+
+  return result;
 }
 
 export async function mixQuestions() {
@@ -79,6 +89,7 @@ export async function mixQuestions() {
 
     selected.forEach((r) => {
       if (sheetName === "Đúng sai") {
+        // Đúng sai: B → K
         mixedQuestions.push({
           type: sheetName,
           question: r[0] || "",
@@ -86,14 +97,14 @@ export async function mixQuestions() {
           answerA: r[2] || "",
           optionB: r[3] || "",
           answerB: r[4] || "",
-          optionC: r[5] || "", 
+          optionC: r[5] || "",
           answerC: r[6] || "",
           optionD: r[7] || "",
           answerD: r[8] || "",
-          explain: r[9] || "",   
+          explain: r[9] || "",
         });
       } else {
-        // ✔ Các sheet còn lại: B → G (6 cột)
+        // Nhận biết / Thông hiểu / Vận dụng: B → G
         mixedQuestions.push({
           type: sheetName,
           question: r[0] || "",
@@ -109,4 +120,3 @@ export async function mixQuestions() {
 
   return shuffle(mixedQuestions);
 }
-
