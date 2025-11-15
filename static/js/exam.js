@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'https://history-test.onrender.com/';
 
 // State Management
 let state = {
