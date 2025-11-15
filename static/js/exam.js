@@ -1,4 +1,4 @@
-const API_BASE = 'https://history-test.onrender.com/';
+const API_BASE = 'https://history-test.onrender.com';
 
 // State Management
 let state = {
