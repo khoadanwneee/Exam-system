@@ -1,0 +1,17 @@
+{
+  "name": "History-exam-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/khoadanwneee/Exam-system.git",
+  "author": "khoadawnee",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
