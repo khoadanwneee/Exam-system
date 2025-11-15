@@ -28,7 +28,7 @@ export async function readSheet(range) {
 }
 
 export async function readAllSheets() {
-    const sheetNames = ['Nhận biết', 'Thông hiểu', 'Vận dụng', 'Đúng sai'];
+    const sheetNames = ['Nhận biết', 'Thông hiểu', 'Vận dụng'];
     const range = "B:G";
     const sheets = await getSheetsClient();
     const result = {};
@@ -40,13 +40,19 @@ export async function readAllSheets() {
         });
         result[name] = data.values || [];
     }
+
+    const { data } = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `Đúng sai!B:K`,
+    });
+    result["Đúng sai"] = data.values || [];
+
     return result;
 }
 
 export async function mixQuestions() {
   const allSheets = await readAllSheets();
 
-  // Số lượng cần lấy ở từng loại
   const pickCount = {
     "Nhận biết": 8,
     "Thông hiểu": 6,
@@ -54,7 +60,6 @@ export async function mixQuestions() {
     "Đúng sai": 2
   };
 
-  // Hàm trộn mảng ngẫu nhiên (Fisher–Yates)
   const shuffle = (array) => {
     const arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -66,27 +71,42 @@ export async function mixQuestions() {
 
   const mixedQuestions = [];
 
-  // Duyệt từng sheet
   for (const [sheetName, rows] of Object.entries(allSheets)) {
     const count = pickCount[sheetName] || 0;
-    if (rows.length === 0) continue;
+    if (!rows.length) continue;
 
-    // Trộn thứ tự & chọn số lượng cần
     const selected = shuffle(rows).slice(0, count);
 
-    // Map thành object dễ dùng hơn
     selected.forEach((r) => {
-      mixedQuestions.push({
-        question: r[0] || "",
-        optionA: r[1] || "",
-        optionB: r[2] || "",
-        optionC: r[3] || "",
-        optionD: r[4] || "",
-        answer: r[5] || "",
-      });
+      if (sheetName === "Đúng sai") {
+        mixedQuestions.push({
+          type: sheetName,
+          question: r[0] || "",
+          optionA: r[1] || "",
+          answerA: r[2] || "",
+          optionB: r[3] || "",
+          answerB: r[4] || "",
+          optionC: r[5] || "", 
+          answerC: r[6] || "",
+          optionD: r[7] || "",
+          answerD: r[8] || "",
+          explain: r[9] || "",   
+        });
+      } else {
+        // ✔ Các sheet còn lại: B → G (6 cột)
+        mixedQuestions.push({
+          type: sheetName,
+          question: r[0] || "",
+          optionA: r[1] || "",
+          optionB: r[2] || "",
+          optionC: r[3] || "",
+          optionD: r[4] || "",
+          answer: r[5] || "",
+        });
+      }
     });
   }
 
-  // Trộn lại toàn bộ câu hỏi lần nữa
   return shuffle(mixedQuestions);
 }
+
