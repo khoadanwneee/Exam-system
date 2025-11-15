@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Exam Portal</title>
+    <link rel="stylesheet" href="/static/css/exam.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>📜 KIỂM TRA ĐÁNH GIÁ _CHƯƠNG 1</h1>
+            <p>Kiểm tra kiến thức lịch sử của bạn</p>
+        </header>
+
+        <div id="login-section" class="card">
+            <h2>Đăng nhập</h2>
+            <div class="form-group">
+                <label for="userIdInput">Nhập Tên Học Sinh / Tên Đăng Nhập:</label>
+                <input type="text" id="userIdInput" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="off">
+            </div>
+            <button id="startBtn" class="btn primary">Bắt Đầu Kỳ Thi</button>
+            <button id="viewHistoryBtn" class="btn secondary">Xem Điểm Cũ</button>
+        </div>
+
+        <div id="exam-section" class="card hidden">
+            <div class="exam-header">
+                <span id="timer">Thời gian: 00:00</span>
+                <span id="student-display"></span>
+            </div>
+            <div id="questions-container">
+                <p class="loading">Đang tải câu hỏi từ máy chủ...</p>
+            </div>
+            <button id="submitBtn" class="btn success">Nộp Bài Thi</button>
+        </div>
+
+        <div id="result-section" class="card hidden">
+            <div id="score-display">
+                <h2>Kỳ Thi Hoàn Thành!</h2>
+                <div class="score-circle">
+                    <span id="final-score">0</span>
+                    <span class="total">/ 10</span>
+                </div>
+                <p id="status-message"></p>
+            </div>
+            
+            <div class="actions">
+                <button id="viewAnswersBtn" class="btn primary" style="display:none;">Xem Câu Trả Lời & Lời Giải Thích</button>
+                <button onclick="location.reload()" class="btn primary">Làm Bài Thi Mới</button>
+                <button id="refreshHistory" class="btn secondary">Làm Mới Lịch Sử</button>
+            </div>
+
+            <h3>Lịch Sử Làm Bài Của Người Dùng</h3>
+            <div id="history-list">
+                </div>
+        </div>
+    </div>
+
+    <script src="/static/js/exam.js"></script>
+</body>
+</html>

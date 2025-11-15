@@ -1,0 +1,407 @@
+/* Import font Merriweather: Hỗ trợ Tiếng Việt cực tốt, dễ đọc */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
+
+/* Blink animation for timer */
+@keyframes blink {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0.3;
+    }
+}
+
+:root {
+    --bg-paper: #fdfbf7;       /* Màu nền giấy sáng */
+    --bg-old: #f0e6d2;         /* Màu giấy cũ dịu mắt hơn */
+    --ink: #333333;            /* Màu mực đen xám (đỡ gắt hơn đen tuyền) */
+    --accent: #8b4513;         /* Màu nâu da thuộc */
+    --red-seal: #c0392b;       /* Màu đỏ dấu chấm điểm */
+    --border-color: #d6cfa2;
+}
+
+body {
+    /* Dùng Merriweather cho toàn bộ trang web */
+    font-family: 'Merriweather', serif; 
+    background-color: var(--bg-old);
+    /* Vân giấy nhẹ nhàng hơn */
+    background-image: radial-gradient(#dccbba 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin: 0;
+    padding: 40px 20px;
+    color: var(--ink);
+    line-height: 1.6; /* Tăng khoảng cách dòng cho dễ đọc */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* --- Header --- */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #bbb; /* Đường kẻ mảnh đơn giản */
+    padding-bottom: 20px;
+}
+
+header h1 { 
+    color: var(--accent); 
+    font-size: 2.5rem;
+    margin: 0;
+    font-weight: 900; /* Đậm để nổi bật */
+    text-transform: uppercase;
+}
+
+header p {
+    font-style: italic;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* --- Card Style --- */
+.card {
+    background: var(--bg-paper);
+    padding: 40px;
+    border: 1px solid #ddd; /* Viền mỏng hiện đại hơn chút */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    border-radius: 4px;
+}
+
+.hidden { display: none; }
+
+/* --- Form Elements --- */
+.form-group { margin-bottom: 25px; }
+
+label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: bold; 
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #ccc; /* Quay về viền khung bình thường cho dễ nhìn */
+    border-radius: 4px;
+    font-family: 'Merriweather', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    box-sizing: border-box; /* Đảm bảo không bị vỡ layout */
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+/* --- Buttons --- */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+}
+
+.btn.primary {
+    background: var(--accent);
+    color: white;
+}
+.btn.primary:hover { background: #6d360e; }
+
+.btn.secondary {
+    background: #95a5a6;
+    color: white;
+}
+.btn.secondary:hover { background: #7f8c8d; }
+
+.btn.success {
+    margin-top: 20px;
+    width: 100%;
+    background-color: var(--red-seal);
+    color: white;
+}
+.btn.success:hover { background-color: #a93226; }
+
+/* --- Exam Interface --- */
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: var(--accent);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.question-block {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.question-text { 
+    font-size: 1.2em; 
+    margin-bottom: 15px; 
+    color: #000; /* Màu đen cho câu hỏi dễ đọc nhất */
+}
+
+/* Radio inputs to rõ ràng */
+.options label {
+    display: flex; /* Căn chỉnh thẳng hàng */
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.options label:hover {
+    background-color: #f0e6d2;
+}
+
+.options input { 
+    margin-right: 15px; 
+    width: 18px; 
+    height: 18px;
+    accent-color: var(--accent); /* Màu của dấu chấm radio */
+}
+
+/* --- Results --- */
+#score-display { text-align: center; margin-bottom: 30px; }
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border: 5px solid var(--red-seal);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+    color: var(--red-seal);
+    background-color: #fff;
+}
+
+#final-score { 
+    font-size: 3em; 
+    font-weight: 900; 
+    line-height: 1;
+}
+
+.total { font-size: 1.2em; font-weight: bold; opacity: 0.7; }
+
+#status-message {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.history-item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+/* --- Answer Review Styles --- */
+#answers-container {
+    margin-bottom: 30px;
+}
+
+.answer-block {
+    background: #fff;
+    border-left: 5px solid #95a5a6;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.answer-block.correct {
+    border-left-color: #27ae60;
+    background-color: #f0fdf4;
+}
+
+.answer-block.incorrect {
+    border-left-color: #e74c3c;
+    background-color: #fef2f2;
+}
+
+.answer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.question-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--accent);
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.status.status-correct {
+    background-color: #27ae60;
+    color: white;
+}
+
+.status.status-incorrect {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.question-content {
+    line-height: 1.8;
+}
+
+.question-text {
+    font-size: 1.05rem;
+    margin: 0 0 12px 0;
+    color: #000;
+}
+
+.user-answer {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.02);
+    border-radius: 3px;
+}
+
+.correct-answer {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: rgba(39, 174, 96, 0.1);
+    border-radius: 3px;
+}
+
+.explanation {
+    margin: 15px 0 0 0;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    font-style: italic;
+    color: #555;
+}
+
+.text-correct {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.text-incorrect {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* --- True/False Question Styles --- */
+.statement-block {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.statement-text {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    color: #000;
+    font-weight: 500;
+}
+
+.statement-options {
+    display: flex;
+    gap: 20px;
+}
+
+.statement-options label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.statement-options input {
+    margin-right: 8px;
+}
+
+/* --- Statement Review Styles --- */
+.statements-review {
+    margin: 15px 0;
+}
+
+.statement-review {
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-left: 3px solid #95a5a6;
+    border-radius: 3px;
+}
+
+.statement-review.stmt-correct {
+    border-left-color: #27ae60;
+    background-color: #f0fdf4;
+}
+
+.statement-review.stmt-incorrect {
+    border-left-color: #e74c3c;
+    background-color: #fef2f2;
+}
+
+.statement-text {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #000;
+}
+
+.statement-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.95rem;
+}
+
+.user-stmt-answer,
+.correct-stmt-answer {
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+
+.user-stmt-answer {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.correct-stmt-answer {
+    background-color: rgba(39, 174, 96, 0.1);
+}

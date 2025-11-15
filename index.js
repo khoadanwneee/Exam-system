@@ -1,11 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path'; // REQUIRED: Import path
+import { fileURLToPath } from 'url'; // REQUIRED: Import for __dirname
 
-//Import service
+// Import service
 import * as sheetService from './services/sheet.service.js';
 import connectDatabase from './db.config.js';
 import Result from './score.model.js';
+
+// 1. CONFIGURATION FOR ES MODULE PATHS
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
@@ -20,12 +26,20 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json());                       
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// 2. SERVE STATIC FILES (CSS/JS)
+// This exposes the 'static' folder at the URL '/static'
+app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// 3. SERVE THE HTML PAGE
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    // Uses path.join to safely find view/exam.html
+    res.sendFile(path.join(__dirname, 'view', 'exam.html'));
 });
+
+// --- API ENDPOINTS ---
 
 app.get('/sheet/question', async (req, res) => {
     try {
@@ -47,7 +61,7 @@ app.get('/sheet/question', async (req, res) => {
 
 app.post("/score/submit", async (req, res) => {
   try {
-    const { sessionId, userId, score, total, startedAt, finishedAt, meta } = req.body;
+    const { sessionId, userId, score, total, startedAt, finishedAt, meta, questions } = req.body;
 
     if (!sessionId || score == null || total == null) {
       return res.status(400).json({
